@@ -55,15 +55,15 @@ const TabbedForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
+
         const newErrors = {};
         if (!formData.firstName) newErrors.firstName = 'First Name is required';
         if (!formData.email) newErrors.email = 'Email is required';
         if (!formData.studentId) newErrors.studentId = 'Student ID is required';
         setErrors(newErrors);
-    
+
         const isValid = Object.keys(newErrors).length === 0;
-    
+
         if (isValid) {
             const jsonData = JSON.stringify(formData, null, 2);
             alert(`Form submitted successfully!\n\n${jsonData}`);
@@ -71,7 +71,7 @@ const TabbedForm = () => {
         } else {
             const errorMessages = Object.values(newErrors).join('\n');
             alert(`Please fix the following errors:\n\n${errorMessages}`);
-    
+
             const firstTabWithError = tabs.find(tab =>
                 Object.keys(newErrors).some(errorKey => formDataBelongsToTab(tab, errorKey))
             );
@@ -80,8 +80,6 @@ const TabbedForm = () => {
             }
         }
     };
-    
-    
 
     const formDataBelongsToTab = (tab, field) => {
         const tabFields = {
@@ -94,24 +92,30 @@ const TabbedForm = () => {
     };
 
     return (
-        <div className="container">
-            <div className="card shadow">
-                <div className="card-header">
-                    <h3 className="text-center">Registration Form</h3>
+        <div className="container mt-5">
+            <div className="card shadow-sm border-0">
+                <div className="card-header bg-black text-white text-center py-3">
+                    <h3 className="mb-0">Registration Form</h3>
                 </div>
                 <div className="card-body">
-                    {/* Tab navigation */}
-                    <div className="d-flex border-bottom mb-4">
+                    <ul className="nav nav-tabs justify-content-center mb-4">
                         {tabs.map(tab => (
-                            <Tab
-                                key={tab}
-                                name={tab.charAt(0).toUpperCase() + tab.slice(1).replace('Info', ' Info')}
-                                isActive={activeTab === tab}
-                                onClick={() => handleTabChange(tab)}
-                                hasError={Object.keys(errors).some(errorKey => formDataBelongsToTab(tab, errorKey))}
-                            />
+                            <li className="nav-item" key={tab}>
+                                <a
+                                    className={`nav-link ${activeTab === tab ? 'active font-weight-bold' : ''}`}
+                                    style={{
+                                        borderRadius: '0.25rem',
+                                        margin: '0 0.25rem',
+                                        cursor: 'pointer',
+                                        transition: 'background-color 0.3s'
+                                    }}
+                                    onClick={() => handleTabChange(tab)}
+                                >
+                                    {tab.charAt(0).toUpperCase() + tab.slice(1).replace('Info', ' Info')}
+                                </a>
+                            </li>
                         ))}
-                    </div>
+                    </ul>
 
                     <form onSubmit={activeTab === 'additional' ? handleSubmit : handleNext}>
                         <TabContent
@@ -121,11 +125,11 @@ const TabbedForm = () => {
                             errors={errors}
                         />
 
-                        <div className="text-center mt-4">
+                        <div className="mt-4">
                             {activeTab === 'additional' ? (
-                                <button type="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" className="btn btn-primary btn-lg w-100">Submit</button>
                             ) : (
-                                <button type="button" className="btn btn-secondary" onClick={handleNext}>Next</button>
+                                <button type="button" className="btn btn-secondary btn-lg w-100" onClick={handleNext}>Next</button>
                             )}
                         </div>
                     </form>
