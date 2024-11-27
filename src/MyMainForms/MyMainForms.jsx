@@ -6,6 +6,8 @@ import BasicForms from "./BasicForms";
 import ControlledInput from "./ControlledInput";
 import UnControlledInput from "./UncontrolledInput";
 import TabbedForm from "./TabForm/TabbedForm";
+import StudentDetails from "./StudentDetails";
+import MyData from "./MyData";
 
 const MyMainForms = () => {
     return (
@@ -35,6 +37,16 @@ const MyMainForms = () => {
                             Registration Form
                         </Link>
                     </li>
+                    <li className="nav-item">
+                        <Link to="student-details" className="nav-link">
+                            View Student Details
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="my-data" className="nav-link">
+                            User Table Details
+                        </Link>
+                    </li>
                 </ul>
             </nav>
             <div className="card shadow-sm">
@@ -44,6 +56,8 @@ const MyMainForms = () => {
                         <Route path="controlled-input" element={<ControlledInput />} />
                         <Route path="uncontrolled-input" element={<UnControlledInput />} />
                         <Route path="tabbed-form" element={<TabbedForm />} />
+                        <Route path="student-details" element={<StudentDetails />} />
+                        <Route path="my-data" element={<MyData />} />
                     </Routes>
                 </div>
             </div>

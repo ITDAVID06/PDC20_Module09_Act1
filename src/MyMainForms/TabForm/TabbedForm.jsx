@@ -53,33 +53,46 @@ const TabbedForm = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         const newErrors = {};
         if (!formData.firstName) newErrors.firstName = 'First Name is required';
         if (!formData.email) newErrors.email = 'Email is required';
         if (!formData.studentId) newErrors.studentId = 'Student ID is required';
         setErrors(newErrors);
-
+    
         const isValid = Object.keys(newErrors).length === 0;
-
+    
         if (isValid) {
-            const jsonData = JSON.stringify(formData, null, 2);
-            alert(`Form submitted successfully!\n\n${jsonData}`);
-            console.log(jsonData);
-        } else {
-            const errorMessages = Object.values(newErrors).join('\n');
-            alert(`Please fix the following errors:\n\n${errorMessages}`);
-
-            const firstTabWithError = tabs.find(tab =>
-                Object.keys(newErrors).some(errorKey => formDataBelongsToTab(tab, errorKey))
-            );
-            if (firstTabWithError) {
-                setActiveTab(firstTabWithError);
+            try {
+                const response = await fetch('http://localhost/pdc20/submit.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+    
+                const result = await response.json();
+    
+                if (response.ok) {
+                    alert('Form submitted successfully!');
+                    setFormData({
+                        firstName: '', lastName: '', dob: '', gender: '', email: '',
+                        phone: '', address: '', city: '', studentId: '', program: '',
+                        yearLevel: '', gpa: '', hobbies: '', skills: '', notes: ''
+                    });
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the form.');
             }
+        } else {
+            alert('Please correct the errors and try again.');
         }
     };
+    
 
     const formDataBelongsToTab = (tab, field) => {
         const tabFields = {
